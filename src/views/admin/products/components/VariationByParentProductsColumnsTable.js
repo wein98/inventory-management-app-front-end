@@ -1,5 +1,8 @@
 import {
   Flex,
+  Heading,
+  IconButton,
+  Spacer,
   Table,
   Tbody,
   Td,
@@ -19,7 +22,7 @@ import {
 
 // Custom components
 import Card from "components/card/Card";
-import Menu from "components/menu/MainMenu";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 export default function VariationByParentProductsColumnsTable(props) {
   const { columnsData, tableData, productSKU, variationByProductData } = props;
   console.log(variationByProductData);
@@ -30,6 +33,7 @@ export default function VariationByParentProductsColumnsTable(props) {
     {
       columns,
       data,
+      initialState: { pageIndex:0, pageSize:10 }
     },
     useGlobalFilter,
     useSortBy,
@@ -40,14 +44,23 @@ export default function VariationByParentProductsColumnsTable(props) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
     prepareRow,
-    initialState,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
   } = tableInstance;
-  initialState.pageSize = 5;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+  const bgButton = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+  
   return (
     <Card
       direction='column'
@@ -62,13 +75,29 @@ export default function VariationByParentProductsColumnsTable(props) {
           lineHeight='100%'>
           {`Variation products of parent product SKU ${productSKU}`}
         </Text>
-        <Menu />
-      </Flex>
+        <Spacer />
+        <Flex align='center'>
+        <IconButton
+          bg={bgButton}
+          borderRadius="10px"
+          mr = "4"
+          icon={<ChevronLeftIcon boxSize={5}
+          onClick={() => previousPage()} disabled={!canPreviousPage} />}
+        />
+        <Heading mr="4" size="md">
+          {pageIndex + 1} of {pageOptions.length}
+        </Heading>
+        <IconButton
+          bg={bgButton}
+          borderRadius="10px"
+          icon={<ChevronRightIcon boxSize={5}
+          onClick={() => nextPage()} disabled={!canNextPage} />}
+        />
+        </Flex>      </Flex>
       <Flex px='25px' justify='space-between' mb='20px'>
         <Text
           color={textColor}
           fontSize='18px'
-          // fontWeight='700'
           lineHeight='100%'>
             <p>{`Product name: ${tableData.name}`}</p>
             <p>{`Category: ${tableData.category}`}</p>

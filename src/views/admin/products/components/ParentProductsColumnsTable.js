@@ -8,6 +8,9 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  IconButton,
+  Spacer,
+  Heading
 } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import {
@@ -19,17 +22,19 @@ import {
 
 // Custom components
 import Card from "components/card/Card";
-import Menu from "components/menu/MainMenu";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 export default function ParentProductsColumnsTable(props) {
   const { columnsData, tableData } = props;
   console.log(tableData);
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
 
+  // https://ncoughlin.com/posts/react-table-usePagination/
   const tableInstance = useTable(
     {
       columns,
       data,
+      initialState: { pageIndex:0, pageSize:10 }
     },
     useGlobalFilter,
     useSortBy,
@@ -40,14 +45,24 @@ export default function ParentProductsColumnsTable(props) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
     prepareRow,
-    initialState,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
   } = tableInstance;
-  initialState.pageSize = 5;
+  
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+  const bgButton = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+
   return (
     <Card
       direction='column'
@@ -62,7 +77,25 @@ export default function ParentProductsColumnsTable(props) {
           lineHeight='100%'>
           All parent products
         </Text>
-        <Menu />
+        <Spacer />
+        <Flex align='center'>
+        <IconButton
+          bg={bgButton}
+          borderRadius="10px"
+          mr = "4"
+          icon={<ChevronLeftIcon boxSize={5}
+          onClick={() => previousPage()} disabled={!canPreviousPage} />}
+        />
+        <Heading mr="4" size="md">
+          {pageIndex + 1} of {pageOptions.length}
+        </Heading>
+        <IconButton
+          bg={bgButton}
+          borderRadius="10px"
+          icon={<ChevronRightIcon boxSize={5}
+          onClick={() => nextPage()} disabled={!canNextPage} />}
+        />
+        </Flex>
       </Flex>
       <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
         <Thead>
@@ -128,7 +161,7 @@ export default function ParentProductsColumnsTable(props) {
                   } else if (cell.column.Header === "UPDATED_AT") {
                     data = (
                       <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
+                        {cell.value.substring(0,10)}
                       </Text>
                     );
                   } else if (cell.column.Header === "WORKMANSHIP") {

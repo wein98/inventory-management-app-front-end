@@ -1,5 +1,8 @@
 import { Alert, AlertDescription, AlertIcon, Box, Button, Flex, Input, Spacer, Text, useColorModeValue } from "@chakra-ui/react"
 import { useState } from "react";
+import {
+    URL
+} from '../../../../constants.js'
 
 export default function NewProductModal(props) {
     const textColor = useColorModeValue("secondaryGray.900", "white");
@@ -43,7 +46,7 @@ export default function NewProductModal(props) {
         const formData = new FormData();
         formData.append('file', selectedFile);
         
-        let response = await fetch(`http://localhost:3030/api/product/products/import/${productType}`,
+        let response = await fetch(`${URL.HOST}/api/product/products/import/${productType}`,
             {
 				method: 'POST',
                 headers: {

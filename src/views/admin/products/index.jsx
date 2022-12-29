@@ -9,7 +9,8 @@ import {
   variationByParentProductsDataColumns
 } from "views/admin/products/variables/columnsData"
 import {
-    PRODUCT_TYPE
+    PRODUCT_TYPE,
+    URL
 } from '../../../constants'
 import { useState } from "react";
 import VariationByParentProductsColumnsTable from "./components/VariationByParentProductsColumnsTable";
@@ -44,7 +45,7 @@ export default function Products() {
     }
 
     let onFormSubmit = async () => {
-        let url = productType === 'PARENT' ? 'http://localhost:3030/api/product' : 'http://localhost:3030/api/product/variations'
+        let url = productType === 'PARENT' ? `${URL.HOST}/api/product` : `${URL.HOST}/api/product/variations`
         url = productSKU === '' ? url : url+`/${productSKU}` ;
         console.log(url)
         // TODO: data validation
