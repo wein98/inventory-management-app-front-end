@@ -22,7 +22,7 @@
 */
 
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 // Chakra imports
 import {
   Box,
@@ -47,6 +47,11 @@ import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+import {
+  URL
+} from '../../../constants.js'
+import { useDispatch, useSelector } from "react-redux";
+import { login } from '../../../redux/actions/auth'
 
 function SignIn() {
   // Chakra color mode
@@ -67,6 +72,31 @@ function SignIn() {
   );
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+    const dispatch = useDispatch();
+    const { isLoggedIn } = useSelector(state => state.auth);
+
+    async function signIn() {
+      // hash the password
+      dispatch(login(email, password))
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          alert("Error logging in. " + error)
+        });
+    }
+
+  const signInOnClick = () => {
+    signIn();
+  }
+
+  if (isLoggedIn) {
+    return <Redirect to="/admin" />;
+  }
+
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
@@ -104,29 +134,6 @@ function SignIn() {
           mx={{ base: "auto", lg: "unset" }}
           me='auto'
           mb={{ base: "20px", md: "auto" }}>
-          <Button
-            fontSize='sm'
-            me='0px'
-            mb='26px'
-            py='15px'
-            h='50px'
-            borderRadius='16px'
-            bg={googleBg}
-            color={googleText}
-            fontWeight='500'
-            _hover={googleHover}
-            _active={googleActive}
-            _focus={googleActive}>
-            <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
-            Sign in with Google
-          </Button>
-          <Flex align='center' mb='25px'>
-            <HSeparator />
-            <Text color='gray.400' mx='14px'>
-              or
-            </Text>
-            <HSeparator />
-          </Flex>
           <FormControl>
             <FormLabel
               display='flex'
@@ -147,6 +154,7 @@ function SignIn() {
               mb='24px'
               fontWeight='500'
               size='lg'
+              onChange={e => {setEmail(e.target.value)}}
             />
             <FormLabel
               ms='4px'
@@ -165,6 +173,7 @@ function SignIn() {
                 size='lg'
                 type={show ? "text" : "password"}
                 variant='auth'
+                onChange={e => {setPassword(e.target.value)}}
               />
               <InputRightElement display='flex' alignItems='center' mt='4px'>
                 <Icon
@@ -191,15 +200,6 @@ function SignIn() {
                   Keep me logged in
                 </FormLabel>
               </FormControl>
-              <NavLink to='/auth/forgot-password'>
-                <Text
-                  color={textColorBrand}
-                  fontSize='sm'
-                  w='124px'
-                  fontWeight='500'>
-                  Forgot password?
-                </Text>
-              </NavLink>
             </Flex>
             <Button
               fontSize='sm'
@@ -207,29 +207,11 @@ function SignIn() {
               fontWeight='500'
               w='100%'
               h='50'
-              mb='24px'>
+              mb='24px'
+              onClick={signInOnClick}>
               Sign In
             </Button>
           </FormControl>
-          <Flex
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='start'
-            maxW='100%'
-            mt='0px'>
-            <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              Not registered yet?
-              <NavLink to='/auth/sign-up'>
-                <Text
-                  color={textColorBrand}
-                  as='span'
-                  ms='5px'
-                  fontWeight='500'>
-                  Create an Account
-                </Text>
-              </NavLink>
-            </Text>
-          </Flex>
         </Flex>
       </Flex>
     </DefaultAuth>
