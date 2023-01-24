@@ -47,9 +47,6 @@ import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
-import {
-  URL
-} from '../../../constants.js'
 import { useDispatch, useSelector } from "react-redux";
 import { login } from '../../../redux/actions/auth'
 
@@ -79,7 +76,7 @@ function SignIn() {
     const { isLoggedIn } = useSelector(state => state.auth);
 
     async function signIn() {
-      // hash the password
+      // TODO: hash the password
       dispatch(login(email, password))
         .then(() => {
           window.location.reload();

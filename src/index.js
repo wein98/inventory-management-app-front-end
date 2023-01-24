@@ -10,6 +10,7 @@ import theme from "theme/theme";
 import { ThemeEditorProvider } from "@hypertheme-editor/chakra-ui";
 import store from './store.js'
 import { Provider } from "react-redux";
+import PrivateRoute from 'AuthGuard'
 
 ReactDOM.render(
   <ChakraProvider theme={theme}>
@@ -18,8 +19,12 @@ ReactDOM.render(
         <ThemeEditorProvider>
           <HashRouter>
             <Switch>
-              <Route path={`/auth`} component={AuthLayout} />
-              <Route path={`/admin`} component={AdminLayout} />
+              <Route path={`/auth`} >
+                <AuthLayout/>
+              </Route>
+              <PrivateRoute path={`/admin`} >
+                <AdminLayout/>
+              </PrivateRoute>
               <Redirect from='/' to='/auth' />
             </Switch>
           </HashRouter>
