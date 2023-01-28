@@ -181,7 +181,7 @@ function SignIn() {
                 />
               </InputRightElement>
             </InputGroup>
-            <Flex justifyContent='space-between' align='center' mb='24px'>
+            {/* <Flex justifyContent='space-between' align='center' mb='24px'>
               <FormControl display='flex' alignItems='center'>
                 <Checkbox
                   id='remember-login'
@@ -197,7 +197,7 @@ function SignIn() {
                   Keep me logged in
                 </FormLabel>
               </FormControl>
-            </Flex>
+            </Flex> */}
             <Button
               fontSize='sm'
               variant='brand'

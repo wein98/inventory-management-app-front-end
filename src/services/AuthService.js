@@ -19,7 +19,7 @@ const login = (username, password) => {
   };
 
 const logout = () => {
-    Cookies.removeItem("token");
+    Cookies.remove("token");
 };
   
 export default {

@@ -3,6 +3,8 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
+import { logout } from '../../../redux/actions/auth'
 
 export function SidebarLinks(props) {
   //   Chakra color mode
@@ -17,6 +19,8 @@ export function SidebarLinks(props) {
   let brandColor = useColorModeValue("brand.500", "brand.400");
 
   const { routes } = props;
+
+  const dispatch = useDispatch();
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -46,13 +50,13 @@ export function SidebarLinks(props) {
             {createLinks(route.items)}
           </>
         );
-      } else if (
-        route.layout === "/admin" ||
+      } else if ( 
         route.layout === "/auth" ||
+        route.layout === "/admin" ||
         route.layout === "/rtl"
       ) {
         return (
-          <NavLink key={index} to={route.layout + route.path}>
+          <NavLink key={index} to={route.layout + route.path} onClick={() =>  route.layout === "/auth" ? dispatch(logout()) : null}>
             {route.icon ? (
               <Box>
                 <HStack
@@ -83,7 +87,7 @@ export function SidebarLinks(props) {
                           ? "bold"
                           : "normal"
                       }>
-                      {route.name}
+                      {route.layout === "/auth" ? "Sign Out" : route.name}
                     </Text>
                   </Flex>
                   <Box
