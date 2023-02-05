@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import VariationByParentProductsColumnsTable from "./components/VariationByParentProductsColumnsTable";
 import NewProductModal from "./components/NewProductModal";
+import ExportDataModal from "./components/ExportDataModal";
 
 export default function Products() {
     // Chakra Color Mode
@@ -30,7 +31,11 @@ export default function Products() {
     const [productSKU, setProductSKU] = useState('');
     const [productType, setProductType] = useState('');
     const [table, setTable] = useState();
-    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const [ExportDataModalOpen, setExportDataModalOpen] = useState(false);
+    const { onClose: closeExportDataModal, onOpen: openExportDataModal, isOpen: exportDataIsOpen } = useDisclosure();
+    const [newProductModalOpen, setNewProductModalOpen] = useState(false);
+    const { onClose: closeNewProductModal, onOpen: openNewProductModal, isOpen: newProductIsOpen } = useDisclosure();
 
     async function fetchTableData(url) {
         let response = await fetch(url)
@@ -83,33 +88,35 @@ export default function Products() {
 
     return (
         <Box p='10px' pt={{ base: "180px", md: "80px", xl: "80px" }} >
-            {/* <Flex
-            w={{ sm: "100%", md: "auto" }}
-            alignItems='center'
-            flexDirection='row'
-            bg={menuBg}
-            flexWrap={{ base: "wrap", md: "nowrap" }}
-            p='10px'
-            borderRadius='30px'
-            boxShadow={shadow}> */}
 
-                <Modal size='xxl' isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                    <ModalHeader>New Product</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <NewProductModal />
-                    </ModalBody>
-                    {/* <ModalFooter>
-                        <Button colorScheme="brand" mr={3} onClick={onClose}>
-                        Close
-                        </Button>
-                        <Button variant="ghost">Upload Products</Button>
-                    </ModalFooter> */}
-                    </ModalContent>
-                </Modal>
-            {/* </Flex> */}
+            <Modal size='xxl' isOpen={newProductIsOpen} onClose={closeNewProductModal}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalHeader>New Product</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <NewProductModal />
+                </ModalBody>
+                {/* <ModalFooter>
+                    <Button colorScheme="brand" mr={3} onClick={onClose}>
+                    Close
+                    </Button>
+                    <Button variant="ghost">Upload Products</Button>
+                </ModalFooter> */}
+                </ModalContent>
+            </Modal>
+
+            <Modal size='xxl' isOpen={exportDataIsOpen} onClose={closeExportDataModal}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalHeader>Export Data</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <ExportDataModal />
+                </ModalBody>
+                </ModalContent>
+            </Modal>
+            
             <Flex
             w={{ sm: "100%", md: "auto" }}
             alignItems='center'
@@ -150,7 +157,9 @@ export default function Products() {
                 
                 <Spacer />
                 
-                <Button variant='brand' onClick={onOpen}>New Product</Button>
+                <Button variant='brand' mr='10px' onClick={openExportDataModal}>Export Data</Button>
+
+                <Button variant='brand' onClick={openNewProductModal}>New Product</Button>
             </Flex>
 
             <Flex

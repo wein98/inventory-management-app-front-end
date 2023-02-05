@@ -4,7 +4,7 @@ import {
     URL
 } from '../../../../constants.js'
 
-export default function NewProductModal(props) {
+export default function NewProductModal() {
     const textColor = useColorModeValue("secondaryGray.900", "white");
     let menuBg = useColorModeValue("white", "navy.800");
     const inputBg = useColorModeValue("secondaryGray.300", "navy.900");
@@ -88,10 +88,6 @@ export default function NewProductModal(props) {
             </AlertDescription>
         </Alert>
         )
-    }
-
-    let onUploadSubmit = () => {
-
     }
 
     return (
