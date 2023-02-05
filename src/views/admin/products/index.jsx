@@ -16,6 +16,7 @@ import { useState } from "react";
 import VariationByParentProductsColumnsTable from "./components/VariationByParentProductsColumnsTable";
 import NewProductModal from "./components/NewProductModal";
 import ExportDataModal from "./components/ExportDataModal";
+import Cookies from 'js-cookie';
 
 export default function Products() {
     // Chakra Color Mode
@@ -38,10 +39,15 @@ export default function Products() {
     const { onClose: closeNewProductModal, onOpen: openNewProductModal, isOpen: newProductIsOpen } = useDisclosure();
 
     async function fetchTableData(url) {
-        let response = await fetch(url)
-                .catch(e => {
-                    alert("Error processing this data due to server error.");
-                });
+        let response = await fetch(url, {
+            headers: {
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+                'Content-Type': 'application/json'
+              }
+            })
+            .catch(e => {
+                alert("Error processing this data due to server error.");
+            });
         if (response.ok) {
             return response.json();
         } else {
@@ -50,14 +56,13 @@ export default function Products() {
     }
 
     let onFormSubmit = async () => {
-        let url = productType === 'PARENT' ? `${URL.HOST}/api/product` : `${URL.HOST}/api/product/variations`
-        url = productSKU === '' ? url : url+`/${productSKU}` ;
-        console.log(url)
+        let path = productType === 'PARENT' ? `${URL.HOST}/product` : `${URL.HOST}/product/variations`
+        path = productSKU === '' ? path : path+`/${productSKU}` ;
         // TODO: data validation
 
         if ((productType === 'PARENT') || (productType === "VARIATION" && productSKU != "")) {
 
-            let result = await fetchTableData(url);
+            let result = await fetchTableData(path);
             console.log(result);
 
             if (productType === PRODUCT_TYPE.PARENT && productSKU.length == 0) {

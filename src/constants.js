@@ -5,5 +5,5 @@ export const PRODUCT_TYPE = {
 
 export const URL = {
     // HOST: "http://ec2-18-142-115-198.ap-southeast-1.compute.amazonaws.com:3030"
-    HOST: "http://localhost:3030"
+    HOST: "http://localhost:3030/api"
 }

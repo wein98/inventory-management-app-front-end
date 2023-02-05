@@ -46,7 +46,7 @@ export default function NewProductModal() {
         const formData = new FormData();
         formData.append('file', selectedFile);
         
-        let response = await fetch(`${URL.HOST}/api/product/products/import/${productType}`,
+        await fetch(`${URL.HOST}/api/product/products/import/${productType}`,
             {
 				method: 'POST',
                 headers: {
